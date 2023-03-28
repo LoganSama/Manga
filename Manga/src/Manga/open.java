@@ -22,7 +22,7 @@ public class open{
 		// TODO Auto-generated method stub
 		
 		@SuppressWarnings("unused")
-		String driverPath = "D:\\GIt\\Manga\\Manga\\Manga\\Lib\\chromedriver.exe";
+		String driverPath = "";
 		WebDriver driver = new ChromeDriver();
 		ArrayList<String> newTab = new ArrayList<String>(driver.getWindowHandles());
 		driver.get("https://w9.jujmanga.com/");
