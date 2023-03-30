@@ -3,6 +3,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Set;
 
 import org.openqa.selenium.By;
@@ -17,32 +18,53 @@ import java.io.File;
 import java.io.IOException;  
 import java.awt.image.BufferedImage;  
 public class open{
-
+	static WebDriver driver = new ChromeDriver();
+	static WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(4));
+	public static String imgXpath ="//div[contains(@class,'simplesocialbuttons')]/..//img[contains(@alt,'1')]";
+	public static String folderPath="D:\\MangaLad\\Manga\\Manga\\Manga Chapter Files\\";
+	public static Scanner sc = new Scanner(System.in);
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+
 		@SuppressWarnings("unused")
-		String driverPath = "";
-		WebDriver driver = new ChromeDriver();
+		String driverPath = "D:\\\\MangaLad\\\\Manga\\\\Manga\\\\Lib\\\\chromedriver.exe";
+
 		ArrayList<String> newTab = new ArrayList<String>(driver.getWindowHandles());
 		driver.get("https://w9.jujmanga.com/");
 		driver.manage().window().maximize();
-		 WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(4));
-		 w.until(ExpectedConditions.presenceOfElementLocated (By.xpath("//*[text()='Jujutsu Kaisen, Chapter 1']"))).click();
-		 driver.switchTo().window(newTab.get(0));
-//		 driver.close();
-		System.out.println("YAY??");
-		w.until(ExpectedConditions.presenceOfElementLocated (By.xpath("//div[contains(@class,'simplesocialbuttons')]/..//img[contains(@alt,'1')]")));
-		WebElement imgalt = driver.findElement(By.xpath("//div[contains(@class,'simplesocialbuttons')]/..//img[contains(@alt,'1')]"));
+
+		w.until(ExpectedConditions.presenceOfElementLocated (By.xpath("//*[text()='Jujutsu Kaisen, Chapter 1']"))).click();
+		driver.switchTo().window(newTab.get(0));
+		System.out.println("Enter Folder Name");
+		folderPath=folderPath + sc.next();
+		createFolder(folderPath);
+		saveIMG();
+		//driver.close();
+	}
+
+	public static void createFolder(String path) {
+		File file = new File(path);
+		boolean bool = file.mkdir();
+		if(bool) {
+			System.out.println("Folder Created under" + path);
+		}
+		else {
+			System.out.println("Folder Not Created");
+		}
+	}
+	public static void saveIMG() {
+		w.until(ExpectedConditions.presenceOfElementLocated (By.xpath(imgXpath)));
+		WebElement imgalt = driver.findElement(By.xpath(imgXpath));
 		String imgSRC = imgalt.getAttribute("src");
-		 URL imageURL;
+		URL imageURL;
 		try {
 			imageURL = new URL(imgSRC);
-	     BufferedImage saveImage = ImageIO.read(imageURL);
-	     
-	     ImageIO.write(saveImage, "png", new File("img1.png"));
+			BufferedImage saveImage = ImageIO.read(imageURL);
+			ImageIO.write(saveImage, "jpg", new File(folderPath + "\\im1.jpg"));
+			System.out.println("Image Added");
 		} catch (Exception e) {
 		}
-	        driver.close();
 	}
-	}
+
+}
+
